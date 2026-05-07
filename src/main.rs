@@ -15,7 +15,7 @@ use utoipa_actix_web::AppExt;
 use utoipa_swagger_ui::SwaggerUi;
 use migration::{Migrator, MigratorTrait};
 use crate::admin::{check_login_state, login, set_no_service_date};
-use crate::user::{add_customer, get_customers};
+use crate::user::{add_customer, get_customers, get_no_service_date};
 use crate::counter::{get_now_counter, next_number, previous_number, set_number};
 
 pub struct AppState {
@@ -105,5 +105,6 @@ fn config(cfg: &mut utoipa_actix_web::service_config::ServiceConfig) {
         .service(login)
         .service(check_login_state)
         .service(set_no_service_date)
+        .service(get_no_service_date)
     ;
 }
