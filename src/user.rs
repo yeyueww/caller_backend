@@ -59,9 +59,9 @@ pub async fn add_customer(
     }
     latest_number = latest_number + 1;
     for i in 0..(request.how_much_customer as usize) {
-        if latest_number.to_string().contains('4') || latest_number.to_string().contains('0') {
-            latest_number = latest_number + 1
-        };
+        while latest_number % 10 == 0 || latest_number % 10 == 4 {
+            latest_number += 1;
+        }
         let custom = db::customer::ActiveModel {
             name: Set(request.name[i].clone()),
             date: Set(date.clone()),
