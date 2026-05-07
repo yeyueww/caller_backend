@@ -5,6 +5,7 @@ use actix_web::{HttpResponse, Responder, get, post, web, cookie, HttpRequest};
 use actix_web::cookie::SameSite;
 use actix_web::cookie::time::Duration;
 use chrono::{Datelike, NaiveDate, Weekday};
+use log::info;
 use sea_orm::{EntityTrait, QueryFilter, QuerySelect};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
@@ -80,8 +81,8 @@ pub async fn check_login_state(
     }
 
     let cookie = cookie.unwrap();
-
-    if app_state.cache.get(&cookie.to_string()).await.is_none() {
+    info!("User session cookie is {}", cookie.value());
+    if app_state.cache.get(&cookie.value().to_string()).await.is_none() {
         return HttpResponse::Unauthorized().finish();
     }
 
@@ -112,7 +113,7 @@ pub async fn set_no_service_date(
 
     let cookie = cookie.unwrap();
 
-    if app_state.cache.get(&cookie.to_string()).await.is_none() {
+    if app_state.cache.get(&cookie.value().to_string()).await.is_none() {
         return HttpResponse::Unauthorized().finish();
     }
 

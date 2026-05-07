@@ -58,7 +58,7 @@ pub async fn next_number(
 
     let cookie = cookie.unwrap();
 
-    if app_state.cache.get(&cookie.to_string()).await.is_none() {
+    if app_state.cache.get(&cookie.value().to_string()).await.is_none() {
         return HttpResponse::Unauthorized().finish();
     }
 
@@ -116,7 +116,7 @@ pub async fn previous_number(
 
     let cookie = cookie.unwrap();
 
-    if app_state.cache.get(&cookie.to_string()).await.is_none() {
+    if app_state.cache.get(&cookie.value().to_string()).await.is_none() {
         return HttpResponse::Unauthorized().finish();
     }
 
@@ -171,7 +171,7 @@ pub async fn set_number(
 
     let cookie = cookie.unwrap();
 
-    if app_state.cache.get(&cookie.to_string()).await.is_none() {
+    if app_state.cache.get(&cookie.value().to_string()).await.is_none() {
         return HttpResponse::Unauthorized().finish();
     }
 
