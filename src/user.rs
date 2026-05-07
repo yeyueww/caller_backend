@@ -59,7 +59,7 @@ pub async fn add_customer(
     }
     latest_number = latest_number + 1;
     for i in 0..(request.how_much_customer as usize) {
-        if latest_number.to_string().contains(['0', '4']) {
+        if latest_number.to_string().contains('4') || latest_number.to_string().contains('0') {
             latest_number = latest_number + 1
         };
         let custom = db::customer::ActiveModel {
@@ -88,7 +88,7 @@ pub async fn add_customer(
                     let mut pre_customers = Vec::new();
                     for c in customers {
                         pre_customers.push(PreCustomer {
-                            id: c.id,
+                            id: c.number,
                             name: c.name,
                         });
                     }
