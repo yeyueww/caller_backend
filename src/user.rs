@@ -124,7 +124,7 @@ pub async fn get_customers(
     match customers {
         Ok(customers) => {
             let pre_customers: Vec<PreCustomer> = customers.into_iter().map(|c| PreCustomer {
-                id: c.id,
+                id: c.number,
                 name: c.name,
             }).collect();
             HttpResponse::Ok().json(pre_customers)
