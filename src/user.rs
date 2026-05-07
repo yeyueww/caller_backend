@@ -28,7 +28,7 @@ pub struct PreCustomer {
 #[utoipa::path(
     post,
     tag = "Customer",
-    summary = "新增顧客",
+    summary = "新增顧客到特定日期",
     responses(
         (status = 201, body=[PreCustomer]),
         (status = 500, description = "Internal server error"),
@@ -104,7 +104,7 @@ pub async fn add_customer(
 #[utoipa::path(
     get,
     tag = "Customer",
-    summary = "取得顧客",
+    summary = "取得特定日期的顧客列表",
     responses(
         (status = 200, body=[PreCustomer]),
         (status = 500, description = "Internal server error"),
@@ -128,6 +128,33 @@ pub async fn get_customers(
                 name: c.name,
             }).collect();
             HttpResponse::Ok().json(pre_customers)
+        }
+        Err(_) => HttpResponse::InternalServerError().finish(),
+    }
+}
+
+#[utoipa::path(
+    get,
+    tag = "Date",
+    summary = "取得無法提供服務日期",
+    responses(
+        (status = 200, body=[String]),
+        (status = 500, description = "Internal server error"),
+    ),
+)]
+#[get("/date")]
+pub async fn get_no_service_date(
+    app_state: web::Data<AppState>,
+) -> impl Responder {
+    let dates = db::unable_date::Entity::find()
+        .filter(db::unable_date::Column::Date.gte(chrono::Utc::now().date_naive()))
+        .all(&app_state.db_conn)
+        .await;
+
+    match dates {
+        Ok(dates) => {
+            let res: Vec<chrono::NaiveDate> = dates.into_iter().map(|d| d.date).collect();
+            HttpResponse::Ok().json(res)
         }
         Err(_) => HttpResponse::InternalServerError().finish(),
     }

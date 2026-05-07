@@ -91,7 +91,7 @@ pub async fn check_login_state(
 #[utoipa::path(
     post,
     tag = "Admin",
-    summary = "set no service date",
+    summary = "設定無服務的日期，如日期已經存在於資料庫中，將會將其刪除。",
     responses(
         (status = 200, description = "successfully"),
         (status = 400, description = "Not logged in"),
